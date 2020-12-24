@@ -17,29 +17,42 @@ const ActType = {
 function init() {
     let document = null;
 
+    // Repo.getAssetsFixed().then((assets) => {
+    //     document = new Document(assets, ActType.WEAR);
+    //     return document.create();
+    // })
+    //     .then((assets) => {
+    //         Repo.getSubjects().then((subjects) => {
+    //             assets.forEach(asset => {
+    //                 document.createTitle(ActType.WEAR, asset, subjects);
+    //             })
+    //         });
+    //     });
+
+    // Repo.getAssetsIntangible().then((assets) => {
+    //     document = new Document(assets, ActType.BABAK);
+    //     return document.create();
+    // })
+    //     .then((assets) => {
+    //         Repo.getSubjects().then((subjects) => {
+    //             assets.forEach(asset => {
+    //                 document.createTitle(ActType.BABAK, asset, subjects);
+    //             })
+    //         });
+    //     });
+
     Repo.getAssetsFixed().then((assets) => {
-        document = new Document(assets, ActType.WEAR);
+        document = new Document(assets, ActType.WITHOUTWEAR);
         return document.create();
     })
         .then((assets) => {
             Repo.getSubjects().then((subjects) => {
                 assets.forEach(asset => {
-                    document.createTitle(ActType.WEAR, asset, subjects);
+                    document.createTitle(ActType.WITHOUTWEAR, asset, subjects);
                 })
             });
         });
 
-    Repo.getAssetsIntangible().then((assets) => {
-        document = new Document(assets, ActType.BABAK);
-        return document.create();
-    })
-        .then((assets) => {
-            Repo.getSubjects().then((subjects) => {
-                assets.forEach(asset => {
-                    document.createTitle(ActType.BABAK, asset, subjects);
-                })
-            });
-        });
 }
 
 //---------------ASSET-----------------------------------------//
@@ -242,7 +255,7 @@ let Repo = (function () {
                             date: row.values[5],
                             startcost: row.values[6],
                             wear: row.values[7],
-                            endcost: row.values[8],
+                            endcost: row.values[6],  //  endcost: row.values[8],
                             bill: row.values[9]
                         }
                     );
@@ -697,6 +710,9 @@ let Document = function (assets, actType) {
                 let lastRow = sheet.lastRow != undefined ? sheet.lastRow.number + 1 : 1;
                 sheet.insertRow(lastRow, value, 'o');
 
+                sheet.getColumn(9).numFmt = '#,##0.00';
+                sheet.getColumn(12).numFmt = '#,##0.00';
+
                 sheet.getRow(lastRow).font = { name: 'Times New Roman', size: 12, family: 4 };
                 sheet.getCell(`A${lastRow}`).alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
                 sheet.getCell(`B${lastRow}`).alignment = { vertical: 'middle', horizontal: 'left', wrapText: true };
@@ -988,6 +1004,161 @@ let Document = function (assets, actType) {
                 break;
             }
             case ActType.WITHOUTWEAR: {
+                let row = sheet.lastRow != undefined ? sheet.lastRow.number + 1 : 1;
+                sheet.insertRow(row,
+                    ['Разом:',
+                        '',
+                        'x',
+                        'x',
+                        'x',
+                        'x',
+                        'x',
+                        value.amount,
+                        value.startcost,
+                        'x',
+                        value.amount,
+                        value.endcost,
+                        'x',
+                    ]);
+                sheet.mergeCells(`A${row}:B${row}`);
+                sheet.getRow(row).font = { name: 'Times New Roman', size: 12, family: 4, bold: true };
+                sheet.getCell(`C${row}`).alignment = { vertical: 'middle', horizontal: 'center' };
+                sheet.getCell(`D${row}`).alignment = { vertical: 'middle', horizontal: 'center' };
+                sheet.getCell(`E${row}`).alignment = { vertical: 'middle', horizontal: 'center' };
+                sheet.getCell(`F${row}`).alignment = { vertical: 'middle', horizontal: 'center' };
+                sheet.getCell(`G${row}`).alignment = { vertical: 'middle', horizontal: 'center' };
+                sheet.getCell(`H${row}`).alignment = { vertical: 'middle', horizontal: 'center' };
+                sheet.getCell(`I${row}`).alignment = { vertical: 'middle', horizontal: 'center' };
+                sheet.getCell(`J${row}`).alignment = { vertical: 'middle', horizontal: 'center' };
+                sheet.getCell(`K${row}`).alignment = { vertical: 'middle', horizontal: 'center' };
+                sheet.getCell(`L${row}`).alignment = { vertical: 'middle', horizontal: 'center' };
+                sheet.getCell(`M${row}`).alignment = { vertical: 'middle', horizontal: 'center' };
+
+                sheet.getCell(`A${row}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' }, bottom: { style: 'thin' } };
+                sheet.getCell(`C${row}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' }, bottom: { style: 'thin' } };
+                sheet.getCell(`D${row}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' }, bottom: { style: 'thin' } };
+                sheet.getCell(`E${row}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' }, bottom: { style: 'thin' } };
+                sheet.getCell(`F${row}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' }, bottom: { style: 'thin' } };
+                sheet.getCell(`G${row}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' }, bottom: { style: 'thin' } };
+                sheet.getCell(`H${row}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' }, bottom: { style: 'thin' } };
+                sheet.getCell(`I${row}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' }, bottom: { style: 'thin' } };
+                sheet.getCell(`J${row}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' }, bottom: { style: 'thin' } };
+                sheet.getCell(`K${row}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' }, bottom: { style: 'thin' } };
+                sheet.getCell(`L${row}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' }, bottom: { style: 'thin' } };
+                sheet.getCell(`M${row}`).border = { top: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' }, bottom: { style: 'thin' } };
+
+                sheet.getCell(`I${row}`).numFmt = '#,##0.00';
+                sheet.getCell(`L${row}`).numFmt = '#,##0.00';
+
+                sheet.insertRow(row + 1, []);
+                sheet.insertRow(row + 2, [
+                    'Разом по сторінці:',
+                    '',
+                    'кількість порядкових номерів',
+                    '',
+                    `${Util.numberToDigit(value.amount)} ${Util.numberToString(value.amount, false)}`,
+                    '', '', '', '', '', '', '', ''
+                ]);
+                sheet.mergeCells(`A${row + 2}:B${row + 2}`);
+                sheet.mergeCells(`C${row + 2}:D${row + 2}`);
+                sheet.mergeCells(`E${row + 2}:M${row + 2}`);
+                sheet.getRow(row + 2).font = { name: 'Times New Roman', size: 12, family: 4, bold: true };
+                sheet.getCell(`E${row + 2}`).alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
+                sheet.getCell(`E${row + 2}`).border = { bottom: { style: 'thin' } };
+                sheet.insertRow(row + 3, [
+                    '', '', '', '', '(прописом)', '', '', '', '', '', '', '', ''
+                ]);
+                sheet.getRow(row + 3).font = { name: 'Times New Roman', size: 12, family: 4, italic: true };
+                sheet.mergeCells(`E${row + 3}:M${row + 3}`);
+                sheet.getCell(`E${row + 3}`).alignment = { vertical: 'top', horizontal: 'center' };
+
+                //---------------------------------------//
+                sheet.insertRow(row + 4, [
+                    '',
+                    '',
+                    'загальна кількість одиниць (фактично)',
+                    '', '',
+                    `${Util.numberToDigit(value.amount)} ${Util.numberToString(value.amount, false)}`,
+                    '', '', '', '', '', '', ''
+                ]);
+                sheet.mergeCells(`A${row + 4}:B${row + 4}`);
+                sheet.mergeCells(`C${row + 4}:E${row + 4}`);
+                sheet.mergeCells(`F${row + 4}:M${row + 4}`);
+                sheet.getRow(row + 4).font = { name: 'Times New Roman', size: 12, family: 4, bold: true };
+                sheet.getCell(`F${row + 4}`).alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
+                sheet.getCell(`F${row + 4}`).border = { bottom: { style: 'thin' } };
+                sheet.insertRow(row + 5, [
+                    '', '', '', '', '', '(прописом)', '', '', '', '', '', '', ''
+                ]);
+                sheet.getRow(row + 5).font = { name: 'Times New Roman', size: 12, family: 4, italic: true };
+                sheet.mergeCells(`F${row + 5}:M${row + 5}`);
+                sheet.getCell(`F${row + 5}`).alignment = { vertical: 'top', horizontal: 'center' };
+
+                //---------------------------------------//
+                sheet.insertRow(row + 6, [
+                    '',
+                    '',
+                    'вартість фактична',
+                    '',
+                    `${Util.numberToDigit(value.startcost.toFixed(2))} ${Util.moneyToString(value.startcost)}`,
+                    '', '', '', '', '', '', '', ''
+                ]);
+                sheet.mergeCells(`A${row + 6}:B${row + 6}`);
+                sheet.mergeCells(`C${row + 6}:D${row + 6}`);
+                sheet.mergeCells(`E${row + 6}:M${row + 6}`);
+                sheet.getRow(row + 6).font = { name: 'Times New Roman', size: 12, family: 4, bold: true };
+                sheet.getCell(`E${row + 6}`).alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
+                sheet.getCell(`E${row + 6}`).border = { bottom: { style: 'thin' } };
+                sheet.insertRow(row + 7, [
+                    '', '', '', '', '', '(прописом)', '', '', '', '', '', '', ''
+                ]);
+                sheet.getRow(row + 7).font = { name: 'Times New Roman', size: 12, family: 4, italic: true };
+                sheet.mergeCells(`E${row + 7}:M${row + 7}`);
+                sheet.getCell(`E${row + 7}`).alignment = { vertical: 'top', horizontal: 'center' };
+
+                //---------------------------------------//
+                sheet.insertRow(row + 8, [
+                    '',
+                    '',
+                    'загальна кількість одиниць за даними бухгалтерського обліку',
+                    '', '', '', '',
+                    `${Util.numberToDigit(value.amount)} ${Util.numberToString(value.amount, false)}`,
+                    '', '', '', '', ''
+                ]);
+                sheet.mergeCells(`A${row + 8}:B${row + 8}`);
+                sheet.mergeCells(`C${row + 8}:G${row + 8}`);
+                sheet.mergeCells(`H${row + 8}:M${row + 8}`);
+                sheet.getRow(row + 8).font = { name: 'Times New Roman', size: 12, family: 4, bold: true };
+                sheet.getCell(`H${row + 8}`).alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
+                sheet.getCell(`H${row + 8}`).border = { bottom: { style: 'thin' } };
+                sheet.insertRow(row + 9, [
+                    '', '', '', '', '', '', '', '(прописом)', '', '', '', '', ''
+                ]);
+                sheet.getRow(row + 9).font = { name: 'Times New Roman', size: 12, family: 4, italic: true };
+                sheet.mergeCells(`H${row + 9}:M${row + 9}`);
+                sheet.getCell(`H${row + 9}`).alignment = { vertical: 'top', horizontal: 'center' };
+
+                //---------------------------------------//
+                sheet.insertRow(row + 10, [
+                    '',
+                    '',
+                    'вартість за даними бухгалтерського обліку',
+                    '', '',
+                    `${Util.numberToDigit(value.endcost.toFixed(2))} ${Util.moneyToString(value.endcost)}`,
+                    '', '', '', '', '', '', ''
+                ]);
+                sheet.mergeCells(`A${row + 10}:B${row + 10}`);
+                sheet.mergeCells(`C${row + 10}:E${row + 10}`);
+                sheet.mergeCells(`F${row + 10}:M${row + 10}`);
+                sheet.getRow(row + 10).font = { name: 'Times New Roman', size: 12, family: 4, bold: true };
+                sheet.getCell(`F${row + 10}`).alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
+                sheet.getCell(`F${row + 10}`).border = { bottom: { style: 'thin' } };
+                sheet.insertRow(row + 11, [
+                    '', '', '', '', '', '(прописом)', '', '', '', '', '', '', ''
+                ]);
+                sheet.getRow(row + 11).font = { name: 'Times New Roman', size: 12, family: 4, italic: true };
+                sheet.mergeCells(`F${row + 11}:M${row + 11}`);
+                sheet.getCell(`F${row + 11}`).alignment = { vertical: 'top', horizontal: 'center' };
                 break;
             }
             case ActType.BABAK: {
@@ -1161,7 +1332,6 @@ let Document = function (assets, actType) {
 
     return {
         create: () => {
-            let start = true;
             let temp = null;
             let isPredict = false;
             let tempIndex = null;
@@ -1211,13 +1381,6 @@ let Document = function (assets, actType) {
                     data.forEach((value, index) => {
                         if (height >= ca.headerBegin && height <= ca.headerEnd) {
                             insertHeader(asset.type);
-                            // if (start) {
-                            //     sheet.getColumn(9).numFmt = '#,##0.00';
-                            //     sheet.getColumn(12).numFmt = '#,##0.00';
-                            //     sheet.getColumn(13).numFmt = '#,##0.00';
-                            //     sheet.getColumn(14).numFmt = '#,##0.00';
-                            //     start = false;
-                            // }
                             height = ca.contentBegin;
                             console.log(`Page: ${page}`);
                         }
@@ -1262,9 +1425,61 @@ let Document = function (assets, actType) {
                             console.log(`footer height: ${height} `);
                         }
                     })
-                    newWorkbook.xlsx.writeFile(`./reports/${asset.name}-ОЗ (знос).xlsx`);
+                    newWorkbook.xlsx.writeFile(`./reports/основні засоби/${asset.name}-ОЗ (знос).xlsx`);
                 } else if (actType === ActType.WITHOUTWEAR) {
+                    total = {
+                        amount: 0,
+                        startcost: 0,
+                        endcost: 0
+                    }
 
+                    let data = asset.getData();
+                    data.forEach((value, index) => {
+                        if (height >= ca.headerBegin && height <= ca.headerEnd) {
+                            insertHeader(asset.type);
+                            height = ca.contentBegin;
+                            console.log(`Page: ${ca.page}`);
+                        }
+                        if (height >= ca.contentBegin && height <= ca.contentEnd) {
+                            if (temp) {
+                                insertRow([tempIndex, temp.name, temp.date, temp.code, '-', '-', 'шт.', 1, temp.startcost, '', 1, temp.endcost, '']);
+                                total.amount += 1;
+                                total.startcost += temp.startcost;
+                                total.endcost += temp.endcost;
+                                height += calculateRowHeight(temp.name, sheet.getColumn(2).width - 7, sheet.properties.defaultRowHeight);
+                                temp = null;
+                                tempIndex = null;
+                            }
+                            isPredict = height + calculateRowHeight(value.name, sheet.getColumn(2).width - 7, sheet.properties.defaultRowHeight) <= ca.contentEnd;
+                            if (isPredict) {
+                                insertRow([index + 1, value.name, value.date, value.code, '-', '-', 'шт.', 1, value.startcost, '', 1, value.endcost, '']);
+                                total.amount += 1;
+                                total.startcost += value.startcost;
+                                total.endcost += value.endcost;
+            
+                                height += calculateRowHeight(value.name, sheet.getColumn(2).width - 7, sheet.properties.defaultRowHeight);
+                                isPredict = null;
+                            } else {
+                                temp = value;
+                                tempIndex = index + 1;
+                                height = ca.footerBegin;
+                            }
+                        }
+                        if (height >= ca.footerBegin && height <= ca.footerEnd || data.length == index + 1) {
+                            insertFooter(total);
+                            height += page.getFooterHeight();
+                            sheet.getRow(sheet.lastRow.number).addPageBreak();
+                            page.next();
+                            ca = page.getArea();
+                            height = ca.headerBegin;
+                            total.amount = 0;
+                            total.startcost = 0;
+                            total.wear = 0;
+                            total.endcost = 0;
+                            console.log(`footer height: ${height} `);
+                        }
+                    })
+                    newWorkbook.xlsx.writeFile(`./reports/основні засоби (без зносу)/${asset.name}-ОЗ (без зносу).xlsx`);
                 } else if (actType === ActType.BABAK) {
                     total = {
                         count: 0,
@@ -1323,7 +1538,7 @@ let Document = function (assets, actType) {
                             console.log(`footer height: ${height} `);
                         }
                     })
-                    newWorkbook.xlsx.writeFile(`./reports/${asset.name}-ОЗ (Бабак).xlsx`);
+                    newWorkbook.xlsx.writeFile(`./reports/бабак/${asset.name}-ОЗ (Бабак).xlsx`);
                 }
             })
             return assets;
@@ -1359,7 +1574,7 @@ let Document = function (assets, actType) {
                             cellEndAmount.value = `${Util.numberToDigit(total.amount)} ${Util.numberToString(total.amount)}`;
                             cellEndCost.value = `${Util.numberToDigit(total.endcost.toFixed(2))} ${Util.moneyToString(total.endcost)}`;
 
-                            return workbook.xlsx.writeFile(`./reports/${asset.name}-ОЗ Титулка.xlsx`);
+                            return workbook.xlsx.writeFile(`./reports/основні засоби (без зносу)/${asset.name}-ОЗ Титулка.xlsx`);
                         }).then(() => {
                             console.log('write file ' + asset.name);
                         }).catch(error => console.log(error));
@@ -1389,7 +1604,7 @@ let Document = function (assets, actType) {
                             cellEndAmount.value = `${Util.numberToDigit(total.amount)} ${Util.numberToString(total.amount)}`;
                             cellEndCost.value = `${Util.numberToDigit(total.endcost.toFixed(2))} ${Util.moneyToString(total.endcost)}`;
 
-                            return workbook.xlsx.writeFile(`./reports/${asset.name} - ОЗ Титулка (знос).xlsx`);
+                            return workbook.xlsx.writeFile(`./reports/основні засоби/${asset.name} - ОЗ Титулка (знос).xlsx`);
                         }).then(() => {
                             console.log('write file ' + asset.name);
                         }).catch(error => console.log(error));
@@ -1419,7 +1634,7 @@ let Document = function (assets, actType) {
                             cellEndAmount.value = `${Util.numberToDigit(total.amount)} ${Util.numberToString(total.amount)}`;
                             cellEndSum.value = `${Util.numberToDigit(total.sum.toFixed(2))} ${Util.moneyToString(total.sum)}`;
 
-                            return workbook.xlsx.writeFile(`./reports/${asset.name} - ОЗ Титулка (БАБАК).xlsx`);
+                            return workbook.xlsx.writeFile(`./reports/бабак/${asset.name} - ОЗ Титулка (БАБАК).xlsx`);
                         }).then(() => {
                             console.log('write file ' + asset.name);
                         }).catch(error => console.log(error));
